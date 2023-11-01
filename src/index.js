@@ -3,7 +3,7 @@ require('dotenv').config({
 });
 
 const express = require('express');
-const {makeConnection, getConnection} = require("./helpers/mysqlHelper");
+const {makeConnection} = require("./helpers/mysqlHelper");
 const bodyParser = require('body-parser');
 
 const app = express();
