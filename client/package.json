@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@redux-devtools/extension": "^3.2.6",
+    "@reduxjs/toolkit": "^1.9.7",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.60",
     "@types/react": "^18.2.33",
