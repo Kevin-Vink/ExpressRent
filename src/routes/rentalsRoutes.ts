@@ -1,10 +1,11 @@
-const { getRentals, getRentalById, createRental, generateFakeRentals} = require("../queries/rentalQueries");
-const router = require('express').Router();
+import {createRental, generateFakeRentals, getRentalById, getRentals} from "../queries/rentalQueries";
+import router from "express";
+const rentalRouter = router.Router();
 
 /**
  * Get all the rentals
  */
-router.get('/', async (req, res) => {
+rentalRouter.get('/', async (req, res) => {
     const rentals = await getRentals();
     res.status(200).json(rentals);
 });
@@ -12,10 +13,10 @@ router.get('/', async (req, res) => {
 /**
  * Get a rental by id
  */
-router.get('/:id', async (req, res) => {
+rentalRouter.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const rental = await getRentalById(id);
+        const rental = await getRentalById(parseInt(id));
         res.status(200).json(rental);
     } catch (error) {
         res.status(404).json({ error: error.message });
@@ -25,7 +26,7 @@ router.get('/:id', async (req, res) => {
 /**
  * Create a rental
  */
-router.post('/', async (req, res) => {
+rentalRouter.post('/', async (req, res) => {
     try {
         const rental = await createRental(req.body);
         res.status(201).json(rental);
@@ -39,7 +40,7 @@ router.post('/', async (req, res) => {
 /**
  * Generate fake rentals
  */
-router.post('/generate', async (req, res) => {
+rentalRouter.post('/generate', async (req, res) => {
     try {
         const { amount } = req.body;
         await generateFakeRentals(amount);
@@ -50,4 +51,4 @@ router.post('/generate', async (req, res) => {
     }
 });
 
-module.exports = router;
+export { rentalRouter };

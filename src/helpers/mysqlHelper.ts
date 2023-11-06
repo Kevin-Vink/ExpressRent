@@ -1,4 +1,7 @@
-let mysql = require('mysql2');
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 let connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -7,22 +10,16 @@ let connection = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-let makeConnection = () => {
+export const makeConnection = () => {
     connection.connect();
     console.log("Connected to database");
 }
 
-let closeConnection = () => {
+export const closeConnection = () => {
     connection.end();
     console.log("Closed connection to database");
 }
 
-let getConnection = () => {
+export const getConnection = () => {
     return connection;
-}
-
-module.exports = {
-    makeConnection,
-    closeConnection,
-    getConnection
 }

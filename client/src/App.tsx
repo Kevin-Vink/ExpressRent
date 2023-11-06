@@ -1,19 +1,16 @@
 import React, { type FunctionComponent, useEffect } from 'react'
 import { fetchRentals, generateRentals } from './reducers/rentalsReducer'
-import { useAppDispatch, useAppSelector } from './store/store'
-import { type Rental } from './models/rental'
-import { type Customer } from './models/customer'
+import { type RootState, useAppDispatch, useAppSelector } from './store/store'
+import { type Rental, type Car, type Company, type Customer } from '../../common/types'
 import { fetchCustomers, generateCustomers } from './reducers/customerReducer'
-import { type Car } from './models/car'
 import { generateCars, fetchCars } from './reducers/carsReducer'
-import { type Company } from './models/company'
 import { fetchCompanies, generateCompanies } from './reducers/companyReducer'
 
 const App: FunctionComponent = () => {
-  const rentals = useAppSelector((state: any) => state.rentals.rentals)
-  const customers = useAppSelector((state: any) => state.customers.customers)
-  const cars = useAppSelector((state: any) => state.cars.cars)
-  const companies = useAppSelector((state: any) => state.companies.companies)
+  const { companies } = useAppSelector((state: RootState) => state.companies)
+  const { rentals } = useAppSelector((state: RootState) => state.rentals)
+  const { customers } = useAppSelector((state: RootState) => state.customers)
+  const { cars } = useAppSelector((state: RootState) => state.cars)
   const dispatch = useAppDispatch()
 
   useEffect(() => {

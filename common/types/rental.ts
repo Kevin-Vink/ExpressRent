@@ -2,7 +2,7 @@ import { type Customer } from './customer'
 import { type Car } from './car'
 
 export interface Rental {
-  id: number
+  id?: number
   customer: Customer
   car: Car
   rental_date: Date

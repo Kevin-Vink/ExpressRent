@@ -1,7 +1,7 @@
 import { type Company } from './company'
 
 export interface Car {
-  id: number
+  id?: number
   company: Company
   type: string
   year: number

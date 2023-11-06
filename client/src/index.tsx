@@ -5,10 +5,8 @@ import './index.css'
 import { Provider } from 'react-redux'
 import store from './store/store'
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-)
-root.render(
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <App />
   </Provider>

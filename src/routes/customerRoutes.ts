@@ -1,10 +1,11 @@
-const {getCustomers, getCustomerById, createCustomer, generateFakeCustomers} = require("../queries/customerQueries");
-const router = require('express').Router();
+import {createCustomer, generateFakeCustomers, getCustomerById, getCustomers} from "../queries/customerQueries";
+import router from "express";
+const customerRouter = router.Router();
 
 /**
  * Get all the customers
  */
-router.get('/', async (req, res) => {
+customerRouter.get('/', async (req, res) => {
     const customers = await getCustomers();
     res.status(200).json(customers);
 });
@@ -12,10 +13,10 @@ router.get('/', async (req, res) => {
 /**
  * Get a customer by id
  */
-router.get('/:id', async (req, res) => {
+customerRouter.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const customer = await getCustomerById(id);
+        const customer = await getCustomerById(parseInt(id));
         res.status(200).json(customer);
     } catch (error) {
         res.status(404).json({ error: error.message });
@@ -25,21 +26,19 @@ router.get('/:id', async (req, res) => {
 /**
  * Create a customer
  */
-router.post('/', async (req, res) => {
+customerRouter.post('/', async (req, res) => {
     try {
-        const {name, age} = req.body;
-        const customer = await createCustomer(name, age);
+        const customer = await createCustomer(req.body);
         res.status(201).json(customer);
     } catch (error) {
         res.status(400).json({error: error.message});
-        console.log(error)
     }
 });
 
 /**
  * Generate fake customers
  */
-router.post('/generate', async (req, res) => {
+customerRouter.post('/generate', async (req, res) => {
     try {
         const {amount} = req.body;
         await generateFakeCustomers(amount);
@@ -50,4 +49,4 @@ router.post('/generate', async (req, res) => {
     }
 });
 
-module.exports = router;
+export { customerRouter };

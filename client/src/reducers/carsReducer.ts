@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type Car } from '../models/car'
+import { type Car } from '../../../common/models/car'
 import axios from 'axios'
 
 export interface carsInitialState {
