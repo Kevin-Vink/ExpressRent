@@ -88,7 +88,7 @@ const CreateCarModal: FunctionComponent<Props> = (props: Props) => {
                                 <div className="flex flex-col gap-y-4">
                                     <div className="flex flex-col gap-1">
                                         <label htmlFor="name">Name <span className="text-red-500">*</span></label>
-                                        <div className="relative flex items-center">
+                                        <div className="relative flex items-center capitalize">
                                             <input type="text" name="name" id="name" placeholder="Name"
                                                    value={name}
                                                    onChange={(e) => setName(e.target.value)}

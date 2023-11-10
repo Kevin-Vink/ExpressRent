@@ -203,7 +203,7 @@ const EditCarModal: FunctionComponent<Props> = (props: Props) => {
                         </button>
                         <button type="button"
                                 onClick={handleSubmit}
-                                disabled={car?.color === newColor && car?.type === newType && car?.name === newName && car?.company.id === newCompanyId && car.dailyRate === newDailyRate || newDailyRate <= 0 || newName === ''}
+                                disabled={car?.color === newColor && car?.type === newType && car?.name === newName && newYear === `${car.year}-01` && car?.company.id === newCompanyId && car.dailyRate === newDailyRate || newDailyRate <= 0 || newName === ''}
                                 className="inline-flex disabled:bg-neutral-500 w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-500 sm:ml-3 sm:w-auto">Save
                             Changes
                         </button>

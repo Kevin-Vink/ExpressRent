@@ -9,6 +9,7 @@ import EditCarModal from '../components/modals/car/EditCarModal'
 import CreateCarModal from '../components/modals/car/CreateCarModal'
 import { fetchCompanies } from '../reducers/companyReducer'
 import { Link } from 'react-router-dom'
+import { TrashIcon } from '@heroicons/react/20/solid'
 
 const Cars: FunctionComponent = () => {
   const dispatch = useAppDispatch()
@@ -149,6 +150,27 @@ const Cars: FunctionComponent = () => {
     )
   }
 
+  const shadeColor = (color: string): string => {
+    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + 60)).toString(16)).slice(-2))
+  }
+
+  const nFormatter = (num: number): string => {
+    const lookup = [
+      { value: 1, symbol: '' },
+      { value: 1e3, symbol: 'k' },
+      { value: 1e6, symbol: 'M' },
+      { value: 1e9, symbol: 'G' },
+      { value: 1e12, symbol: 'T' },
+      { value: 1e15, symbol: 'P' },
+      { value: 1e18, symbol: 'E' }
+    ]
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/
+    const item = lookup.slice().reverse().find(function (item) {
+      return num >= item.value
+    })
+    return item ? (num / item.value).toFixed(1).replace(rx, '$1') + item.symbol : '0'
+  }
+
   return (
         <>
             <div
@@ -235,27 +257,35 @@ const Cars: FunctionComponent = () => {
                         </div>
                     )
                   : (
-                        <div className="grid grid-cols-4 xl:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {(!isLoading && (filteredCars.length === 0 && searchTerm === '' || filteredCars.length === 0 && type === 'all')) &&
                                 <p>No cars in database</p>}
                             {filteredCars.map((car) => (
-                                <div key={car.id}>
-                                    <p>{car.name}</p>
-                                    <div className="h-5 w-5 rounded-full" style={{ backgroundColor: `#${car.color}` }}/>
-                                    <p>{car.type}</p>
-                                    <p>{car.year}</p>
-                                    <p>{car.dailyRate}</p>
-                                    <p>{car.company.name}</p>
-                                    <div className="flex gap-x-2">
+                                <div key={car.id} className='rounded-md ring-1 ring-neutral-700 flex flex-col h-full w-full overflow-hidden'>
+                                  <div
+                                      className="w-full h-10 border-b border-neutral-700 flex items-center justify-between px-4"
+                                      style={{ backgroundImage: `linear-gradient(to bottom right,#${car.color}, ${shadeColor(car.color)})` }}>
+                                    <p className="text-sm font-black" style={{
+                                      color: shadeColor(car.color),
+                                      textShadow: '#111 .75px .75px'
+                                    }}>{car.year}</p>
+                                    <TrashIcon className="h-full py-2 transition-all hover:text-red-400 text-black/25" onClick={() => {
+                                      deleteAction(car.id, car.name)
+                                    }}/>
+                                  </div>
+                                  <div className="bg-neutral-800/25 flex flex-col gap-y-2 p-4">
+                                    <p className='overflow-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold'>{car.name}</p>
+                                    <p className='overflow-ellipsis overflow-hidden whitespace-nowrap text-neutral-400'>{car.type}</p>
+                                    <span className='rounded-full w-fit px-2 text-sm py-1 bg-green-400/25 text-green-500'>$ {nFormatter(car.dailyRate)} Daily</span>
+                                    <div>
+                                      <span className="text-sm text-neutral-400">Owned by</span>
+                                      <p className='overflow-ellipsis overflow-hidden whitespace-nowrap'>{car.company.name}</p>
+                                    </div>
+                                  </div>
+                                    <div className="flex overflow-hidden rounded-b-md items-center bg-neutral-800">
                                         <button onClick={() => handleEditCar(car)}
-                                                className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4 mb-4">
+                                                className="hover:bg-stone-600 w-full h-full py-1 transition-all px-4">
                                             Edit
-                                        </button>
-                                        <button
-                                            className="bg-stone-600 hover:bg-red-500 transition-all rounded-full px-4 mb-4"
-                                            type="button" onClick={() => {
-                                              deleteAction(car.id, car.name)
-                                            }}>Delete
                                         </button>
                                     </div>
                                 </div>
