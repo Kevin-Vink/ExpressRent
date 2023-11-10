@@ -4,7 +4,7 @@ import { deleteAllCars, deleteCar, fetchCars, generateCars } from '../reducers/c
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { type Car } from '../../../common/types'
-import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, MagnifyingGlassIcon, PencilIcon } from '@heroicons/react/24/outline'
 import EditCarModal from '../components/modals/car/EditCarModal'
 import CreateCarModal from '../components/modals/car/CreateCarModal'
 import { fetchCompanies } from '../reducers/companyReducer'
@@ -205,7 +205,7 @@ const Cars: FunctionComponent = () => {
                         ))}
                     </select>
                   </div>
-                  <div className="flex gap-x-2 items-center">
+                  <div className="hidden gap-x-2 items-center lg:flex">
                     <span
                         className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
                         onClick={(e) => generateCarsAction(e)}>
@@ -257,21 +257,26 @@ const Cars: FunctionComponent = () => {
                         </div>
                     )
                   : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                             {(!isLoading && (filteredCars.length === 0 && searchTerm === '' || filteredCars.length === 0 && type === 'all')) &&
                                 <p>No cars in database</p>}
                             {filteredCars.map((car) => (
                                 <div key={car.id} className='rounded-md ring-1 ring-neutral-700 flex flex-col h-full w-full overflow-hidden'>
                                   <div
-                                      className="w-full h-10 border-b border-neutral-700 flex items-center justify-between px-4"
+                                      className="w-full h-14 border-b border-neutral-700 flex items-center justify-between px-4"
                                       style={{ backgroundImage: `linear-gradient(to bottom right,#${car.color}, ${shadeColor(car.color)})` }}>
                                     <p className="text-sm font-black" style={{
                                       color: shadeColor(car.color),
                                       textShadow: '#111 .75px .75px'
                                     }}>{car.year}</p>
-                                    <TrashIcon className="h-full py-2 transition-all hover:text-red-400 text-black/25" onClick={() => {
-                                      deleteAction(car.id, car.name)
-                                    }}/>
+                                    <div className='w-fit h-full flex gap-x-2'>
+                                      <PencilIcon className="h-full py-4 transition-all hover:text-black text-black/25"
+                                          onClick={() => handleEditCar(car)}/>
+                                    <TrashIcon className="h-full py-4 transition-all hover:text-red-400 text-black/25"
+                                               onClick={() => {
+                                                 deleteAction(car.id, car.name)
+                                               }}/>
+                                    </div>
                                   </div>
                                   <div className="bg-neutral-800/25 flex flex-col gap-y-2 p-4">
                                     <p className='overflow-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold'>{car.name}</p>
@@ -282,12 +287,6 @@ const Cars: FunctionComponent = () => {
                                       <p className='overflow-ellipsis overflow-hidden whitespace-nowrap'>{car.company.name}</p>
                                     </div>
                                   </div>
-                                    <div className="flex overflow-hidden rounded-b-md items-center bg-neutral-800">
-                                        <button onClick={() => handleEditCar(car)}
-                                                className="hover:bg-stone-600 w-full h-full py-1 transition-all px-4">
-                                            Edit
-                                        </button>
-                                    </div>
                                 </div>
                             ))}
                         </div>
