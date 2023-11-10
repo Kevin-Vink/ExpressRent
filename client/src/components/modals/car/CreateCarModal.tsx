@@ -1,11 +1,11 @@
 import React, { type FunctionComponent, useEffect, useState } from 'react'
-import { type Car } from '../../../common/types'
-import CustomCreatableSelect from './CustomCreatableSelect'
-import { type RootState, useAppDispatch, useAppSelector } from '../store/store'
-import { fetchCompanies } from '../reducers/companyReducer'
+import { type Car } from '../../../../../common/types'
+import CustomCreatableSelect from './../../CustomCreatableSelect'
+import { type RootState, useAppDispatch, useAppSelector } from '../../../store/store'
+import { fetchCompanies } from '../../../reducers/companyReducer'
 import { toast } from 'react-toastify'
 import { ChromePicker } from 'react-color'
-import ConfirmationModal from './ConfirmationModal'
+import ConfirmationModal from './../ConfirmationModal'
 import axios from 'axios'
 
 interface Props {

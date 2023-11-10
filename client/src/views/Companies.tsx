@@ -4,9 +4,9 @@ import { toast } from 'react-toastify'
 import { useAppDispatch } from '../store/store'
 import axios from 'axios'
 import { deleteCompany, generateCompanies } from '../reducers/companyReducer'
-import EditCompanyModal from '../components/EditCompanyModal'
+import EditCompanyModal from '../components/modals/company/EditCompanyModal'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import CreateCompanyModal from '../components/CreateCompanyModal'
+import CreateCompanyModal from '../components/modals/company/CreateCompanyModal'
 
 const Companies: FunctionComponent = () => {
   const dispatch = useAppDispatch()

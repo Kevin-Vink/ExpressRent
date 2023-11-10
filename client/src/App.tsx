@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import Companies from './views/Companies'
 import Customers from './views/Customers'
+import DashboardLayout from './layouts/DashboardLayout'
 
 const App: FunctionComponent = () => {
   return (
@@ -22,9 +23,11 @@ const App: FunctionComponent = () => {
             />
             <BrowserRouter>
                 <Routes>
-                    <Route path="/cars" element={<Cars/>}/>
-                    <Route path="/companies" element={<Companies/>}/>
-                    <Route path="/customers" element={<Customers />}/>
+                    <Route path="/dashboard" element={<DashboardLayout/>}>
+                        <Route index path="cars" element={<Cars/>}/>
+                        <Route path="companies" element={<Companies/>}/>
+                        <Route path="customers" element={<Customers />}/>
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </>

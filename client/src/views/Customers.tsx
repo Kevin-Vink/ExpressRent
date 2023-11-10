@@ -5,8 +5,8 @@ import { type Customer } from '../../../common/types'
 import { toast } from 'react-toastify'
 import { deleteCustomer, generateCustomers } from '../reducers/customerReducer'
 import axios from 'axios'
-import CreateCustomerModal from '../components/CreateCustomerModal'
-import EditCustomerModal from '../components/EditCustomerModal'
+import CreateCustomerModal from '../components/modals/customer/CreateCustomerModal'
+import EditCustomerModal from '../components/modals/customer/EditCustomerModal'
 
 const Customers: FunctionComponent = () => {
   const dispatch = useAppDispatch()

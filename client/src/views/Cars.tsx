@@ -5,8 +5,8 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { type Car } from '../../../common/types'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import EditCarModal from '../components/EditCarModal'
-import CreateCarModal from '../components/CreateCarModal'
+import EditCarModal from '../components/modals/car/EditCarModal'
+import CreateCarModal from '../components/modals/car/CreateCarModal'
 import { fetchCompanies } from '../reducers/companyReducer'
 import { Link } from 'react-router-dom'
 
@@ -217,7 +217,7 @@ const Cars: FunctionComponent = () => {
                         </div>
                     )
                   : (
-                        <div className="grid grid-cols-4 xl:grid-cols-6 gap-4">
+                        <div className="grid grid-cols-4 xl:grid-cols-5 gap-4">
                             {(!isLoading && (filteredCars.length === 0 && searchTerm === '' || filteredCars.length === 0 && type === 'all')) &&
                                 <p>No cars in database</p>}
                             {filteredCars.map((car) => (

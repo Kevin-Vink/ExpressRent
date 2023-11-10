@@ -1,9 +1,9 @@
 import React, { type FunctionComponent, useEffect, useState } from 'react'
-import { useAppSelector } from '../store/store'
-import { type Customer } from '../../../common/types'
+import { useAppSelector } from '../../../store/store'
+import { type Customer } from '../../../../../common/types'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import ConfirmationModal from './ConfirmationModal'
+import ConfirmationModal from './../ConfirmationModal'
 
 interface Props {
   handleClose: (update: boolean) => void
