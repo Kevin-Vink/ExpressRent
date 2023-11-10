@@ -7,5 +7,4 @@ export interface Rental {
   car: Car
   rental_date: Date
   return_date: Date
-  daily_rate: number
 }

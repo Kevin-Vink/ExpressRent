@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type Car } from '../../../common/models/car'
+import { type Car } from '../../../common/types'
 import axios from 'axios'
 
 export interface carsInitialState {
@@ -28,6 +28,22 @@ export const generateCars = createAsyncThunk(
   }
 )
 
+export const deleteCar = createAsyncThunk(
+  'cars/deleteCar',
+  async (id: number) => {
+    const response = await axios.delete(process.env.REACT_APP_SERVER_URL + '/cars/' + id)
+    return response.data
+  }
+)
+
+export const deleteAllCars = createAsyncThunk(
+  'cars/deleteAllCars',
+  async () => {
+    const response = await axios.delete(process.env.REACT_APP_SERVER_URL + '/cars')
+    return response.data
+  }
+)
+
 export const carsSlice = createSlice({
   name: 'cars',
   initialState,
@@ -50,6 +66,20 @@ export const carsSlice = createSlice({
         state.loading = false
       })
       .addCase(generateCars.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(deleteCar.fulfilled, (state, action) => {
+        state.cars = action.payload
+        state.loading = false
+      })
+      .addCase(deleteCar.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(deleteAllCars.fulfilled, (state, action) => {
+        state.cars = action.payload
+        state.loading = false
+      })
+      .addCase(deleteAllCars.pending, (state) => {
         state.loading = true
       })
   }

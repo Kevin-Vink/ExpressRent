@@ -9,7 +9,7 @@ export interface DBRental extends RowDataPacket{
     customer_name: string
     company_id: number
     company_name: string
-    age: number
+    dateBirth: Date
     car_id: number
     car_name: string
     year: number

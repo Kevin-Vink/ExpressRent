@@ -1,4 +1,10 @@
-import {createCompany, generateFakeCompanies, getCompanies, getCompanyById} from "../queries/companyQueries";
+import {
+    createCompany, deleteCompany,
+    generateFakeCompanies,
+    getCompanies,
+    getCompanyById,
+    searchCompanies, updateCompany
+} from "../queries/companyQueries";
 import router from 'express';
 const companyRouter = router.Router();
 
@@ -8,6 +14,19 @@ const companyRouter = router.Router();
 companyRouter.get('/', async (req, res) => {
     const companies = await getCompanies();
     res.status(200).json(companies);
+});
+
+/**
+ * Search for a company/companies
+ */
+companyRouter.get('/search', async (req, res) => {
+    try {
+        const {q} = req.query;
+        if (q == '') res.status(200).json(await getCompanies());
+        else res.status(200).json(await searchCompanies(q.toString().toLowerCase()));
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
 });
 
 /**
@@ -35,6 +54,34 @@ companyRouter.post('/', async (req, res) => {
         console.log(error)
     }
 });
+
+/**
+ * Update a company
+ */
+companyRouter.put('/:id', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const company = await updateCompany(parseInt(id), req.body);
+        res.status(201).json(company);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+});
+
+/**
+ * Delete a company
+ */
+companyRouter.delete('/:id', async (req, res) => {
+    try {
+        const {id} = req.params;
+        await deleteCompany(parseInt(id));
+        const companies = await getCompanies();
+        res.status(200).json(companies);
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+});
+
 
 /**
  * Generate fake companies

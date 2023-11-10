@@ -17,12 +17,12 @@ export async function getRentalById(id: number) : Promise<Rental> {
 }
 
 export async function createRental(rental: Rental) : Promise<void> {
-    await connection.promise().query('INSERT INTO Rental (customer_id, car_id, daily_rate, rental_date, return_date) VALUES(?,?,?,?,?)', [rental.customer.id, rental.car.id, rental.daily_rate, rental.rental_date, rental.return_date]);
+    await connection.promise().query('INSERT INTO Rental (customer_id, car_id, daily_rate, rental_date, return_date) VALUES(?,?,?,?,?)', [rental.customer.id, rental.car.id, rental.rental_date, rental.return_date]);
 }
 
 export async function generateFakeRentals(amount: number) : Promise<void> {
     const rentals = await generateFakeRental(amount)
-    await connection.promise().query('INSERT INTO Rental (rental_date, return_date, daily_rate, customer_id, car_id) VALUES ?', [rentals.map(rental => [rental.rental_date, rental.return_date, rental.daily_rate, rental.customer_id, rental.car_id])]);
+    await connection.promise().query('INSERT INTO Rental (rental_date, return_date, daily_rate, customer_id, car_id) VALUES ?', [rentals.map(rental => [rental.rental_date, rental.return_date, rental.customer_id, rental.car_id])]);
 }
 
 function mapResultToRentals(results: DBRental[]): Rental[] {
@@ -34,11 +34,11 @@ function mapResultToRental(result: DBRental): Rental {
         id: result.id,
         rental_date: result.rental_date,
         return_date: result.return_date,
-        daily_rate: result.daily_rate,
         customer: {
             id: result.customer_id,
             name: result.customer_name,
-            age: result.age,
+            email: result.email,
+            dateBirth: result.dateBirth,
         },
         car: {
             id: result.car_id,
@@ -46,6 +46,7 @@ function mapResultToRental(result: DBRental): Rental {
             year: result.year,
             color: result.color,
             type: result.type,
+            dailyRate: result.daily_rate,
             company: {
                 id: result.company_id,
                 name: result.company_name,
@@ -63,7 +64,6 @@ async function generateFakeRental(amount: number) {
         rentals.push({
             rental_date: pastDate,
             return_date: faker.date.between({from: pastDate, to: new Date()}),
-            daily_rate: faker.number.float({min: 10, max: 100, precision: 0.01}),
             customer_id: await getRandomCustomerId(),
             car_id: await getRandomCarId(),
         })

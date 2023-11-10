@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type Rental } from '../../../common/models/rental'
+import { type Rental } from '../../../common/types'
 import axios from 'axios'
 
 export interface rentalsInitialState {

@@ -1,2 +1,3 @@
 # Ignore everything outside client folder
 ../*
+tailwind.config.js

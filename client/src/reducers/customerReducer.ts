@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type Customer } from '../../../common/models/customer'
+import { type Customer } from '../../../common/types'
 import axios from 'axios'
 
 export interface customersInitialState {
@@ -16,6 +16,14 @@ export const fetchCustomers = createAsyncThunk(
   'customers/fetchCustomers',
   async () => {
     const response = await axios.get(process.env.REACT_APP_SERVER_URL + '/customers')
+    return response.data
+  }
+)
+
+export const deleteCustomer = createAsyncThunk(
+  'customers/deleteCustomer',
+  async (id: number) => {
+    const response = await axios.delete(process.env.REACT_APP_SERVER_URL + '/customers/' + id)
     return response.data
   }
 )
@@ -49,6 +57,11 @@ export const customersSlice = createSlice({
         state.customers = action.payload
         state.loading = false
       }).addCase(generateCustomers.pending, (state) => {
+        state.loading = true
+      }).addCase(deleteCustomer.fulfilled, (state, action) => {
+        state.customers = action.payload
+        state.loading = false
+      }).addCase(deleteCustomer.pending, (state) => {
         state.loading = true
       })
   }
