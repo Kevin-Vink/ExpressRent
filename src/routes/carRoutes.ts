@@ -120,6 +120,7 @@ carRouter.delete('/', async (req, res) => {
 carRouter.post('/generate', async (req, res) => {
     try {
         const {amount} = req.body;
+        if (amount === undefined || amount < 1) throw new Error('Amount must be greater than 0');
         await generateFakeCars(amount);
         const cars = await getCars();
         res.status(201).json(cars);

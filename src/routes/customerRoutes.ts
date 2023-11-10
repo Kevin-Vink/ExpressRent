@@ -88,6 +88,7 @@ customerRouter.delete('/:id', async (req, res) => {
 customerRouter.post('/generate', async (req, res) => {
     try {
         const {amount} = req.body;
+        if (amount === undefined || amount < 1) throw new Error('Amount must be greater than 0');
         await generateFakeCustomers(amount);
         const customers = await getCustomers();
         res.status(201).json(customers);

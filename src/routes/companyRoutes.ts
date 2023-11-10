@@ -89,6 +89,7 @@ companyRouter.delete('/:id', async (req, res) => {
 companyRouter.post('/generate', async (req, res) => {
     try {
         const {amount} = req.body;
+        if (amount === undefined || amount < 1) throw new Error('Amount must be greater than 0');
         await generateFakeCompanies(amount);
         const companies = await getCompanies();
         res.status(201).json(companies);

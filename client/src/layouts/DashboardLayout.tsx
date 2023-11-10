@@ -26,9 +26,7 @@ const DashboardLayout: FunctionComponent = () => {
       >
           <div></div>
           <Sidebar collapsed={collapsed} handleCollapse={handleCollapsed}/>
-          <div className="text-white py-6 px-10">
-              <Outlet/>
-          </div>
+          <Outlet/>
       </div>
   )
 }

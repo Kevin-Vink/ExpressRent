@@ -34,7 +34,7 @@ const CreateCarModal: FunctionComponent<Props> = (props: Props) => {
       if (e.key === 'Escape') {
         handleEditClose()
       }
-      if (e.key === 'Enter' && name !== '' && type !== '' && color !== '' && year !== '' && dailyRate >= 0 && companyId !== 0) {
+      if (e.key === 'Enter' && name !== '' && type !== '' && color !== '' && year <= new Date().getFullYear().toString() && dailyRate >= 0 && companyId !== 0) {
         handleSubmit()
       }
     }
@@ -48,7 +48,7 @@ const CreateCarModal: FunctionComponent<Props> = (props: Props) => {
   }, [])
 
   const handleEditClose = (): void => {
-    if (name !== '' || type !== '' || color !== '' || year !== '' || companyId !== 0) {
+    if (name !== '' || type !== '' || color !== '102030' || companyId !== 0) {
       setShowConfirmationModal(true)
     } else {
       handleClose(false)
@@ -102,7 +102,7 @@ const CreateCarModal: FunctionComponent<Props> = (props: Props) => {
                                             <input type="number" step="0.01" name="dailyRate" id="dailyRate"
                                                    placeholder="Daily Rate"
                                                    value={dailyRate}
-                                                   onChange={(e) => setDailyRate(parseInt(e.target.value))}
+                                                   onChange={(e) => setDailyRate(parseFloat(e.target.value))}
                                                    className="p-2 w-full bg-neutral-800 rounded-md placeholder:text-neutral-400"/>
                                         </div>
                                     </div>

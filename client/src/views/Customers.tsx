@@ -1,15 +1,17 @@
 import React, { type FunctionComponent, type ReactElement, useEffect, useState } from 'react'
-import { useAppDispatch } from '../store/store'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useAppDispatch, useAppSelector } from '../store/store'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { type Customer } from '../../../common/types'
 import { toast } from 'react-toastify'
 import { deleteCustomer, generateCustomers } from '../reducers/customerReducer'
 import axios from 'axios'
 import CreateCustomerModal from '../components/modals/customer/CreateCustomerModal'
 import EditCustomerModal from '../components/modals/customer/EditCustomerModal'
+import { fetchCars } from '../reducers/carsReducer'
 
 const Customers: FunctionComponent = () => {
   const dispatch = useAppDispatch()
+  const { customers } = useAppSelector((state) => state.customers)
 
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false)
   const [showEditModal, setShowEditModal] = useState<boolean>(false)
@@ -19,6 +21,12 @@ const Customers: FunctionComponent = () => {
   const [customersToGenerate, setCustomersToGenerate] = useState<number>(5)
   const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (filteredCustomers.length > customers.length) {
+      dispatch(fetchCars()).catch((err) => toast.error(err.message))
+    }
+  }, [customers, filteredCustomers])
 
   useEffect(() => {
     if (!isLoading) setIsLoading(true)
@@ -102,72 +110,85 @@ const Customers: FunctionComponent = () => {
   }
 
   return (
-      <>
-          <div className="text-white bg-neutral-900 p-4 w-full h-full flex flex-col gap-4 min-h-screen">
-              <div className='flex gap-x-2'>
-                  <input className="bg-stone-600 rounded-full px-4" type="text" placeholder="Search" id="search"
-                         value={searchTerm}
-                         name="search" onChange={(e) => {
-                           setSearchTerm(e.target.value)
-                         }}/>
-                  <p>{filteredCustomers.length} customers</p>
+        <>
+            <div className="text-white bg-neutral-900 w-full h-full flex flex-col gap-4 min-h-screen px-10 py-5">
+                <div className='flex justify-between items-center'>
+                    <div className="flex items-center gap-x-2">
+                        <div className="relative flex">
+                            <MagnifyingGlassIcon
+                                className="w-8 px-2 h-8 stroke-2 rounded-l-md bg-stone-500 text-neutral-100"/>
+                            <input
+                                className="bg-stone-600 placeholder:text-neutral-300 capitalize rounded-r-md py-1 px-4"
+                                type="text" placeholder="Search"
+                                id="search"
+                                value={searchTerm}
+                                name="search" onChange={(e) => {
+                                  setSearchTerm(e.target.value)
+                                }}/>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-x-2">
                   <span
-                      className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-full px-4"
+                      className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
                       onClick={(e) => generateCustomersAction(e)}>
                     Generate {selectComponent()} Customers
                     </span>
-                  <button className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4"
-                          onClick={() => setShowCreateModal(true)}>Create Customer
-                  </button>
-              </div>
-              {searchTerm && (
-                  <div className="flex w-fit py-px overflow-hidden cursor-pointer rounded-md group"
-                       onClick={() => setSearchTerm('')}>
+                        <button className="bg-stone-600 hover:bg-blue-500 transition-all rounded-md py-1 px-4"
+                                onClick={() => setShowCreateModal(true)}>Create Customer
+                        </button>
+                    </div>
+                </div>
+                <div className="flex items-center gap-x-2">
+                    {searchTerm && (
+                        <div className="flex w-fit py-px overflow-hidden cursor-pointer rounded-md group"
+                             onClick={() => setSearchTerm('')}>
                         <span
                             className="bg-neutral-500/25 group-hover:bg-neutral-500/50 transition-all px-2 text-neutral-300 capitalize">
                             {searchTerm}
                         </span>
-                      <XMarkIcon
-                          className="w-6 h-full bg-red-500/25 text-red-500 group-hover:bg-red-500/30 transition-all"/>
-                  </div>
-              )}
-              {isLoading
-                ? (
-                      <div className="flex flex-col gap-4 flex-1 justify-center items-center h-full">
-                          <div
-                              className="animate-spin z-10 rounded-full h-12 w-12 border-[5px] border-r-blue-500 border-neutral-700"/>
-                          <p className="text-sm text-neutral-300">Searching For Customers</p>
-                      </div>
-                  )
-                : (
-                      <div className="grid grid-cols-4 gap-4">
-                          {(!isLoading && (filteredCustomers.length === 0 && searchTerm === '')) &&
-                              <p>No customers in database</p>}
-                          {filteredCustomers.map((customer) => (
-                              <div key={customer.id}>
-                                  <p>{customer.name}</p>
-                                  <p>{birthDateToAge(customer.dateBirth)}</p>
-                                  <p>{customer.email}</p>
-                                  <div className="flex gap-x-2">
-                                      <button onClick={() => handleEditCustomer(customer)}
-                                              className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4 mb-4">
-                                          Edit
-                                      </button>
-                                      <button
-                                          className="bg-stone-600 hover:bg-red-500 transition-all rounded-full px-4 mb-4"
-                                          type="button" onClick={() => {
-                                            deleteAction(customer.id, customer.name)
-                                          }}>Delete
-                                      </button>
-                                  </div>
-                              </div>
-                          ))}
-                      </div>
-                  )}
-          </div>
-          {showEditModal && <EditCustomerModal customer={selectedCustomer} handleClose={handleCloseEditModal}/>}
-          {showCreateModal && <CreateCustomerModal handleClose={handleCloseCreateModal}/>}
-          </>
+                            <XMarkIcon
+                                className="w-6 h-full bg-red-500/25 text-red-500 group-hover:bg-red-500/30 transition-all"/>
+                        </div>
+                    )}
+                    <p className="text-sm text-neutral-400 py-1">{filteredCustomers.length} {filteredCustomers.length === 1 ? 'match' : 'matches'} of {customers.length} total</p>
+                </div>
+                {isLoading
+                  ? (
+                        <div className="flex flex-col gap-4 flex-1 justify-center items-center h-full">
+                            <div
+                                className="animate-spin z-10 rounded-full h-12 w-12 border-[5px] border-r-blue-500 border-neutral-700"/>
+                            <p className="text-sm text-neutral-300">Searching For Customers</p>
+                        </div>
+                    )
+                  : (
+                        <div className="grid grid-cols-4 gap-4">
+                            {(!isLoading && (filteredCustomers.length === 0 && searchTerm === '')) &&
+                                <p>No customers in database</p>}
+                            {filteredCustomers.map((customer) => (
+                                <div key={customer.id}>
+                                    <p>{customer.name}</p>
+                                    <p>{birthDateToAge(customer.dateBirth)}</p>
+                                    <p>{customer.email}</p>
+                                    <div className="flex gap-x-2">
+                                        <button onClick={() => handleEditCustomer(customer)}
+                                                className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4 mb-4">
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="bg-stone-600 hover:bg-red-500 transition-all rounded-full px-4 mb-4"
+                                            type="button" onClick={() => {
+                                              deleteAction(customer.id, customer.name)
+                                            }}>Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+            </div>
+            {showEditModal && <EditCustomerModal customer={selectedCustomer} handleClose={handleCloseEditModal}/>}
+            {showCreateModal && <CreateCustomerModal handleClose={handleCloseCreateModal}/>}
+        </>
   )
 }
 

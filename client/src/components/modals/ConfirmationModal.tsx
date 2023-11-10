@@ -23,7 +23,7 @@ const ConfirmationModal: FunctionComponent<Props> = (props: Props) => {
   }, [])
 
   return (
-        <div className="fixed top-0 text-white bg-black/70 w-full h-screen z-50 flex items-center justify-center">
+        <div className="fixed top-0 left-0 text-white bg-black/70 w-full h-screen z-50 flex items-center justify-center">
             <div
                 className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-neutral-900 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">

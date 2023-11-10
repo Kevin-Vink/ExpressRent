@@ -1,10 +1,10 @@
 import React, { type FunctionComponent, type ReactElement, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/store'
-import { deleteAllCars, deleteCar, generateCars } from '../reducers/carsReducer'
+import { deleteAllCars, deleteCar, fetchCars, generateCars } from '../reducers/carsReducer'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { type Car } from '../../../common/types'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import EditCarModal from '../components/modals/car/EditCarModal'
 import CreateCarModal from '../components/modals/car/CreateCarModal'
 import { fetchCompanies } from '../reducers/companyReducer'
@@ -17,6 +17,7 @@ const Cars: FunctionComponent = () => {
 
   const [selectedCar, setSelectedCar] = useState<Car | undefined>(undefined)
   const { companies } = useAppSelector((state) => state.companies)
+  const { cars } = useAppSelector((state) => state.cars)
 
   const [filteredCars, setFilteredCars] = useState<Car[]>([])
   const [types, setTypes] = useState<string[]>([])
@@ -31,6 +32,12 @@ const Cars: FunctionComponent = () => {
       dispatch(fetchCompanies()).catch((err) => toast.error(err.message))
     }
   }, [])
+
+  useEffect(() => {
+    if (filteredCars.length > cars.length) {
+      dispatch(fetchCars()).catch((err) => toast.error(err.message))
+    }
+  }, [cars, filteredCars])
 
   useEffect(() => {
     fetchTypes().catch((err) => toast.error(err.message))
@@ -144,49 +151,59 @@ const Cars: FunctionComponent = () => {
 
   return (
         <>
-            <div className="text-white bg-neutral-900 p-4 w-full h-full flex flex-col gap-4 min-h-screen relative">
+            <div
+                className="text-white bg-neutral-900 w-full h-full flex flex-col gap-4 min-h-screen relative px-10 py-5">
                 {(!isLoading && companies.length === 0) && (
-                    <div className="fixed top-0 left-0 flex items-center justify-center w-full z-20 transition-all hover:bg-blue-600 bg-blue-500">
+                    <div
+                        className="fixed top-0 left-0 flex items-center justify-center w-full z-20 transition-all hover:bg-blue-600 bg-blue-500">
                         <Link to={'/companies'} className="py-2">
                             No companies exist. Create a company now.
                         </Link>
                     </div>
                 )}
-              <div className='flex gap-x-2'>
-                <input className="bg-stone-600 rounded-full px-4" type="text" placeholder="Search" id="search"
-                       value={searchTerm}
-                       name="search" onChange={(e) => {
-                         setSearchTerm(e.target.value)
-                       }}/>
-                <select className="bg-stone-600 rounded-full px-4" name="type" id="type" value={type}
-                        onChange={(e) => {
-                          setType(e.target.value)
-                        }}>
-                  <option value="all">All</option>
-                  {types.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-                <p>{filteredCars.length} cars</p>
-                <span
-                    className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-full px-4"
-                    onClick={(e) => generateCarsAction(e)}>
+                <div className='flex justify-between items-center'>
+                  <div className="flex items-center gap-x-2">
+                    <div className="relative flex">
+                        <MagnifyingGlassIcon className="w-8 px-2 h-8 stroke-2 rounded-l-md bg-stone-500 text-neutral-100"/>
+                        <input className="bg-stone-600 placeholder:text-neutral-300 capitalize rounded-r-md py-1 px-4" type="text" placeholder="Search"
+                               id="search"
+                               value={searchTerm}
+                               name="search" onChange={(e) => {
+                                 setSearchTerm(e.target.value)
+                               }}/>
+                    </div>
+                    <select className="bg-stone-600 text-center min-w-[15rem] rounded-md py-1 px-4" name="type"
+                            id="type" value={type}
+                            onChange={(e) => {
+                              setType(e.target.value)
+                            }}>
+                        <option value="all">All</option>
+                        {types.map((type) => (
+                            <option key={type} value={type}>{type}</option>
+                        ))}
+                    </select>
+                  </div>
+                  <div className="flex gap-x-2 items-center">
+                    <span
+                        className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
+                        onClick={(e) => generateCarsAction(e)}>
                     Generate {selectComponent()} Cars
                     </span>
-                <button className="bg-stone-600 hover:bg-red-500 transition-all rounded-full px-4"
-                        type="button" onClick={() => {
-                          deleteAll()
-                        }}>Delete All
-                </button>
-                <button className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4"
-                        type="button" onClick={() => setShowCreateModal(true)}>
-                  Create Car
-                </button>
-              </div>
-              <div className="flex gap-x-2">
-                {searchTerm && (
-                    <div className="flex w-fit py-px overflow-hidden cursor-pointer rounded-md group"
-                         onClick={() => setSearchTerm('')}>
+                    <button className="bg-stone-600 hover:bg-red-500 transition-all rounded-md py-1 px-4"
+                            type="button" onClick={() => {
+                              deleteAll()
+                            }}>Delete All
+                    </button>
+                    <button className="bg-stone-600 hover:bg-blue-500 transition-all rounded-md py-1 px-4"
+                            type="button" onClick={() => setShowCreateModal(true)}>
+                        Create Car
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center gap-x-2">
+                    {searchTerm && (
+                        <div className="flex w-fit py-px overflow-hidden cursor-pointer rounded-md group"
+                             onClick={() => setSearchTerm('')}>
                         <span
                             className="bg-neutral-500/25 group-hover:bg-neutral-500/50 transition-all px-2 text-neutral-300 capitalize">
                             {searchTerm}
@@ -194,7 +211,7 @@ const Cars: FunctionComponent = () => {
                             <XMarkIcon
                                 className="w-6 h-full bg-red-500/25 text-red-500 group-hover:bg-red-500/30 transition-all"/>
                         </div>
-                )}
+                    )}
 
                     {(type && type !== 'all') && (
                         <div className="flex w-fit py-px overflow-hidden cursor-pointer rounded-md group"
@@ -207,6 +224,7 @@ const Cars: FunctionComponent = () => {
                                 className="w-6 h-full bg-red-500/25 text-red-500 group-hover:bg-red-500/30 transition-all"/>
                         </div>
                     )}
+                    <p className="text-sm text-neutral-400 py-1">{filteredCars.length} {filteredCars.length === 1 ? 'match' : 'matches'} of {cars.length} total</p>
                 </div>
                 {isLoading
                   ? (

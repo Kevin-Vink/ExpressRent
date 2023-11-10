@@ -124,7 +124,7 @@ const EditCarModal: FunctionComponent<Props> = (props: Props) => {
                                            value={newDailyRate}
                                            onChange={(e) => setNewDailyRate(parseFloat(e.target.value))}
                                            className="p-2 w-full bg-neutral-800 rounded-md placeholder:text-neutral-400"/>
-                                    {newName !== car.name && (
+                                    {newDailyRate !== car.dailyRate && (
                                         <div className="absolute -right-8">
                                           <ArrowUturnLeftIcon onClick={() => setNewDailyRate(car?.dailyRate)}
                                                               className="w-5 text-red-500 h-auto"/>
