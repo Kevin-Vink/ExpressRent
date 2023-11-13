@@ -33,33 +33,58 @@ CREATE TABLE Rental(
     return_date DATE NOT NULL
 );
 
-# INSERT INTO Company(name) VALUES('Hertz');
-# INSERT INTO Company(name) VALUES('Avis');
-# INSERT INTO Company(name) VALUES('Alamo');
-#
-# INSERT INTO Customer(name) VALUES('John Smith');
-# INSERT INTO Customer(name) VALUES('Jane Doe');
-# INSERT INTO Customer(name) VALUES('Bob Jones');
-# INSERT INTO Customer(name) VALUES('Sally Smith');
-# INSERT INTO Customer(name) VALUES('Bill Jones');
-# INSERT INTO Customer(name) VALUES('Mary Doe');
-#
-# INSERT INTO Car(name, company_id, year, type) VALUES('Ford Focus', 1, 2017, 'Hatchback');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Ford Fusion', 1, 2016, 'Sedan');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Ford Mustang', 3, 2022, 'Coupe');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Chevy Malibu', 2, 2019, 'Sedan');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Chevy Impala', 2, 2018, 'Sedan');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Chevy Camaro', 3, 2023, 'Coupe');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Chevy Tahoe', 2, 2020, 'SUV');
-# INSERT INTO Car(name, company_id, year, type) VALUES('Ford Expedition', 1, 2021, 'SUV');
-#
-# INSERT INTO Rental(customer_id, car_id, daily_rate, rental_date, return_date) VALUES(1, 1, 35.00, '2023-01-01', '2023-01-03');
-# INSERT INTO Rental(customer_id, car_id, daily_rate, rental_date, return_date) VALUES(2, 2 , 30.00, '2023-01-04', '2023-01-06');
-# INSERT INTO Rental(customer_id, car_id, daily_rate, rental_date, return_date) VALUES(3, 3, 55.00, '2023-01-07', '2023-01-09');
-# INSERT INTO Rental(customer_id, car_id, daily_rate, rental_date, return_date) VALUES(4, 4, 25.00, '2023-01-10', '2023-01-12');
-# INSERT INTO Rental(customer_id, car_id, daily_rate, rental_date, return_date) VALUES(5, 5, 27.50, '2023-01-13', '2023-01-15');
-# INSERT INTO Rental(customer_id, car_id, daily_rate, rental_date, return_date) VALUES(6, 6, 60.00, '2023-01-16', '2023-01-18');
+# Companies
+INSERT INTO Company(name) VALUES('Hertz');
+INSERT INTO Company(name) VALUES('Avis');
+INSERT INTO Company(name) VALUES('Alamo');
+INSERT INTO Company(name) VALUES('Kayak');
+INSERT INTO Company(name) VALUES('Expedia');
+INSERT INTO Company(name) VALUES('Enterprise');
+INSERT INTO Company(name) VALUES('Hotwire');
+INSERT INTO Company(name) VALUES('Priceline');
 
-# SELECT Rental.rental_date, Rental.return_date, Car.year, Car.color, Car.type, Rental.daily_rate, Customer.name, Car.name, Company.name FROM Rental INNER JOIN Customer ON Rental.customer_id = Customer.id INNER JOIN Car ON Rental.car_id = Car.id INNER JOIN Company ON Car.company_id = Company.id;
-#
-# SELECT type, name, year FROM Car;
+# Customers
+INSERT INTO Customer(name, dateBirth, email) VALUES('Roxanne Castaneda', '1990-01-01', 'roxanne23@hotmail.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Chaim Mcclain', '1991-02-02', 'chaim_mcclain55@gmail.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Bessie Boyle', '1992-03-03', 'bessie1992@outlook.mail.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Nicola Roach', '1993-04-04', 'nicola@hertz.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Rehan Delgado', '1994-05-05', 'rehan_delgado@gmail.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Lillian Freeman', '1995-06-06', 'lillian_06@outlook.mail.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Emelia Mitchell', '1996-07-07', 'emilia89@avisrentals.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Zara Montgomery', '1997-08-08', 'zaramontgomery@gmail.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Rafe Baird', '1998-09-09', 'rafe@expedia.com');
+INSERT INTO Customer(name, dateBirth, email) VALUES('Teddy Lucas', '1999-10-10', 'teddy_lucas99@hotmail.com');
+
+# Cars
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (1, 'SUV', 2016, 82.99, 'Nissan Rogue', 'ffffff');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (2, 'Sedan', 2017, 68.99, 'Toyota Corolla', 'a7a1a1');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (3, 'Sedan', 2018, 72.99, 'Honda Civic', '999c99');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (4, 'Extended Pick-up', 2019, 99.99, 'Ford F-150', 'ff000c');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (5, 'Sedan', 2020, 79.99, 'Toyota Camry', 'b2b27b');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (6, 'Pick-up', 2021, 89.99, 'Chevrolet Silverado', '92b0b0');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (7, 'Sedan', 2023, 74.99, 'Honda Accord', 'FFA500');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (8, 'SUV', 2019, 84.99, 'Toyota RAV4', 'A52A2A');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (1, 'SUV', 2023, 86.99, 'Chevrolet Equinox', 'FFC0CB');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (2, 'SUV', 2016, 79.99, 'Honda CR-V', '080080');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (3, 'Pick-up', 2017, 90.99, 'Toyota Tacoma', '804800');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (4, 'Sedan', 2014, 49.99, 'Chevrolet Malibu', '808080');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (5, 'SUV', 2016, 75.99, 'Ford Escape', '800000');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (6, 'Sedan', 2019, 55.99, 'Nissan Altima', '008080');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (7, 'SUV', 2022, 89.99, 'Ford Explorer', '000080');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (8, 'Sports', 2021, 149.99, 'Chevrolet Corvette C8', 'FF0000');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (1, 'Pick-up', 2019, 89.99, 'Toyota Tundra', 'BEB7BE');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (2, 'Sports', 2020, 249.99, 'Ferrari 488 Pista', 'FFFF00');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (3, 'Sports', 2020, 299.99, 'Lamborghini Aventador', 'c60d7f');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (4, 'Sports', 2022, 199.99, 'Porsche 911', 'FFA500');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (5, 'Sports', 2023, 199.99, 'Audi R8', 'A52A2A');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (6, 'Sports', 2019, 149.99, 'BMW M3', 'FFC0CB');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (7, 'Sports', 2016, 199.99, 'Mercedes-Benz AMG GT', '1e1e1e');
+INSERT INTO Car (company_id, type, year, daily_rate, name, color) VALUES (8, 'Sports', 2017, 249.99, 'McLaren 720S', 'd8a102');
+
+# Rentals
+INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES (1, 1, '2021-01-01', '2021-01-03');
+INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES (2, 2, '2021-01-02', '2021-01-04');
+INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES (3, 3, '2021-01-03', '2021-01-05');
+INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES (4, 4, '2021-01-04', '2021-01-06');
+INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES (5, 5, '2021-01-05', '2021-01-07');
+INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES (6, 6, '2021-01-06', '2021-01-08');

@@ -174,11 +174,11 @@ const Cars: FunctionComponent = () => {
   return (
         <>
             <div
-                className="text-white bg-neutral-900 w-full h-full flex flex-col gap-4 min-h-screen relative px-10 py-5">
+                className="text-white bg-neutral-900 z-30 w-full h-full flex flex-col gap-4 min-h-screen relative px-10 py-5">
                 {(!isLoading && companies.length === 0) && (
                     <div
-                        className="fixed top-0 left-0 flex items-center justify-center w-full z-20 transition-all hover:bg-blue-600 bg-blue-500">
-                        <Link to={'/companies'} className="py-2">
+                        className="fixed top-0 left-0 flex items-center justify-center w-full z-10 transition-all hover:bg-blue-600 bg-blue-500">
+                        <Link to={'/dashboard/companies'} className="py-2">
                             No companies exist. Create a company now.
                         </Link>
                     </div>
@@ -207,7 +207,7 @@ const Cars: FunctionComponent = () => {
                   </div>
                   <div className="hidden gap-x-2 items-center lg:flex">
                     <span
-                        className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
+                        className="bg-stone-600 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
                         onClick={(e) => generateCarsAction(e)}>
                     Generate {selectComponent()} Cars
                     </span>

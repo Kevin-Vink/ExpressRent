@@ -43,7 +43,7 @@ const SideBar: FunctionComponent<Props> = (props: Props) => {
 
   return (
         <div
-            className={`fixed ${collapsed ? 'w-[72px] pl-2' : 'w-[250px]'} transition-[width] duration-500 ease-in-out z-30 h-full text-white border-r border-neutral-700 flex flex-col justify-between p-4`}>
+            className={`fixed ${collapsed ? 'w-[72px] pl-2' : 'w-[250px]'} transition-[width] duration-500 ease-in-out z-40 bg-neutral-900 h-full text-white border-r border-neutral-700 flex flex-col justify-between p-4`}>
             <div className="flex h-full flex-col gap-10">
                 <div className="relative flex items-center">
                     <Link
