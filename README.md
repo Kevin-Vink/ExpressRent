@@ -1,5 +1,8 @@
 # Starting ExpressRent
 
+The database can be created using the create_db.sql file in the root folder.
+the .env file in the root folder should be updated with the correct database credentials.
+
 To start the server run the following command in the the project directory:
 
 ### `npm start`
