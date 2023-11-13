@@ -17,8 +17,8 @@ export async function getCustomerById(id: number) : Promise<Customer> {
     return connection.promise().query<DBCustomer[]>('SELECT * FROM Customer WHERE id = ?', [id]).then(([results]) => mapResultToCustomer(results[0]));
 }
 
-export async function getRandomCustomerId() : Promise<void> {
-    await connection.promise().query('SELECT id FROM Customer ORDER BY RAND() LIMIT 1');
+export async function getRandomCustomerId() : Promise<number> {
+    return await connection.promise().query<DBCustomer[]>('SELECT id FROM Customer ORDER BY RAND() LIMIT 1').then(([results]) => results[0].id);
 }
 
 export async function createCustomer(customer: Customer) {

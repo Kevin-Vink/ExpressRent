@@ -118,9 +118,9 @@ const Companies: FunctionComponent = () => {
                                 }}/>
                         </div>
                     </div>
-                    <div className="flex items-center gap-x-2">
+                    <div className="hidden md:flex items-center gap-x-2">
               <span
-                  className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
+                  className="bg-stone-600  z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
                   onClick={(e) => generateCompaniesAction(e)}>
                     Generate {selectComponent()} Companies
                     </span>
@@ -152,19 +152,20 @@ const Companies: FunctionComponent = () => {
                         </div>
                     )
                   : (
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {(!isLoading && (filteredCompanies.length === 0 && searchTerm === '')) &&
                                 <p>No companies in database</p>}
                             {filteredCompanies.map((company) => (
-                                <div key={company.id}>
-                                    <p>{company.name}</p>
-                                    <div className="flex gap-x-2">
-                                        <button onClick={() => handleEditCompany(company)}
-                                                className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4 mb-4">
+                                <div key={company.id}
+                                     className='rounded-md h-24 ring-1 ring-neutral-700 flex flex-col justify-between w-full overflow-hidden'>
+                                    <p className='overflow-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold p-4'>{company.name}</p>
+                                    <div className="grid grid-cols-2 bg-neutral-800">
+                                    <button onClick={() => handleEditCompany(company)}
+                                                className="hover:bg-stone-600 transition-all py-1 px-4">
                                             Edit
                                         </button>
                                         <button
-                                            className="bg-stone-600 hover:bg-red-500 transition-all rounded-full px-4 mb-4"
+                                            className="hover:bg-stone-600 transition-all py-1 px-4"
                                             type="button" onClick={() => {
                                               deleteAction(company.id, company.name)
                                             }}>Delete

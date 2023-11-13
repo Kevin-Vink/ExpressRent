@@ -4,12 +4,10 @@ import axios from 'axios'
 
 export interface carsInitialState {
   cars: Car[]
-  loading: boolean
 }
 
 const initialState: carsInitialState = {
-  cars: [],
-  loading: false
+  cars: []
 }
 
 export const fetchCars = createAsyncThunk(
@@ -56,31 +54,15 @@ export const carsSlice = createSlice({
     builder
       .addCase(fetchCars.fulfilled, (state, action) => {
         state.cars = action.payload
-        state.loading = false
-      })
-      .addCase(fetchCars.pending, (state) => {
-        state.loading = true
       })
       .addCase(generateCars.fulfilled, (state, action) => {
         state.cars = action.payload
-        state.loading = false
-      })
-      .addCase(generateCars.pending, (state) => {
-        state.loading = true
       })
       .addCase(deleteCar.fulfilled, (state, action) => {
         state.cars = action.payload
-        state.loading = false
-      })
-      .addCase(deleteCar.pending, (state) => {
-        state.loading = true
       })
       .addCase(deleteAllCars.fulfilled, (state, action) => {
         state.cars = action.payload
-        state.loading = false
-      })
-      .addCase(deleteAllCars.pending, (state) => {
-        state.loading = true
       })
   }
 })

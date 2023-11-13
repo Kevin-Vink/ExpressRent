@@ -8,7 +8,9 @@ import {
     updateCar
 } from "../queries/carQueries";
 import router from "express";
-import {Car} from "../../common/types";
+import {Car, Rental} from "../../common/types";
+import {createRental} from "../queries/rentalQueries";
+import {getCustomerById, getRandomCustomerId} from "../queries/customerQueries";
 const carRouter = router.Router();
 
 /**
@@ -37,10 +39,10 @@ carRouter.get('/types', async (req, res) => {
  */
 carRouter.get('/search', async (req, res) => {
     try {
-        const {q, type} = req.query;
+        const {q, type, maxDailyPrice} = req.query;
         let cars: Car[]
-        if (q == '' && type == 'all') cars = await getCars();
-        else cars = await searchCars(q.toString().toLowerCase(), type == 'all' ? '' : type.toString().toLowerCase());
+        if (q == '' && type == 'all' && maxDailyPrice === '') cars = await getCars();
+        else cars = await searchCars(q?.toString().toLowerCase(), type == 'all' ? '' : type?.toString().toLowerCase(), parseInt(maxDailyPrice?.toString()));
         res.status(200).json(cars);
     } catch (error) {
         res.status(404).json({error: error});
@@ -111,6 +113,27 @@ carRouter.delete('/', async (req, res) => {
         res.status(200).json(cars);
     } catch (error) {
         res.status(404).json({error: error.message});
+    }
+});
+
+/**
+ * Rent a car
+ */
+carRouter.post('/:id/rent', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { startDate, endDate } = req.body;
+        const randomCustomer = await getRandomCustomerId();
+        const rental : Rental = {
+            customer: await getCustomerById(randomCustomer),
+            car: await getCarById(parseInt(id)),
+            rental_date: new Date(startDate),
+            return_date: new Date(endDate)
+        }
+        await createRental(rental);
+        res.status(201).json();
+    } catch (error) {
+        res.status(400).json({error: error.message});
     }
 });
 

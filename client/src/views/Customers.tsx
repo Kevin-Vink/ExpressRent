@@ -127,7 +127,7 @@ const Customers: FunctionComponent = () => {
                                 }}/>
                         </div>
                     </div>
-                    <div className="flex items-center gap-x-2">
+                    <div className="hidden md:flex items-center gap-x-2">
                   <span
                       className="bg-stone-600 z-10 cursor-pointer hover:bg-green-500 transition-all rounded-md py-1 px-4"
                       onClick={(e) => generateCustomersAction(e)}>
@@ -161,21 +161,27 @@ const Customers: FunctionComponent = () => {
                         </div>
                     )
                   : (
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {(!isLoading && (filteredCustomers.length === 0 && searchTerm === '')) &&
                                 <p>No customers in database</p>}
                             {filteredCustomers.map((customer) => (
-                                <div key={customer.id}>
-                                    <p>{customer.name}</p>
-                                    <p>{birthDateToAge(customer.dateBirth)}</p>
-                                    <p>{customer.email}</p>
-                                    <div className="flex gap-x-2">
+                                <div key={customer.id}
+                                     className='rounded-md h-full ring-1 ring-neutral-700 flex flex-col justify-between w-full overflow-hidden'>
+                                    <div className="flex flex-col gap-y-2 p-4">
+                                        <p className='overflow-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold'>{customer.name}</p>
+                                        <div className='flex gap-x-2'>
+                                            <span className="text-sm text-neutral-400">Age</span>
+                                            <p className="px-3 rounded-full text-sm bg-blue-400/25 text-blue-500 w-fit">{birthDateToAge(customer.dateBirth)}</p>
+                                        </div>
+                                        <p className='text-neutral-400'>{customer.email}</p>
+                                    </div>
+                                    <div className="grid grid-cols-2 bg-neutral-800">
                                         <button onClick={() => handleEditCustomer(customer)}
-                                                className="bg-stone-600 hover:bg-blue-500 transition-all rounded-full px-4 mb-4">
+                                                className="hover:bg-stone-600 transition-all py-1 px-4">
                                             Edit
                                         </button>
                                         <button
-                                            className="bg-stone-600 hover:bg-red-500 transition-all rounded-full px-4 mb-4"
+                                            className="hover:bg-stone-600 transition-all py-1 px-4"
                                             type="button" onClick={() => {
                                               deleteAction(customer.id, customer.name)
                                             }}>Delete

@@ -9,20 +9,24 @@ import {DBRental} from "../models";
 const connection = getConnection();
 
 export async function getRentals() : Promise<Rental[]> {
-    return connection.promise().query<DBRental[]>('SELECT Rental.id, Rental.rental_date, Rental.return_date, Rental.car_id, Car.name as car_name, Car.year, Car.color, Car.type, Rental.daily_rate, Rental.customer_id, Customer.name as customer_name, Customer.age, Car.name as car_name, Company.name as company_name, Car.company_id FROM Rental LEFT JOIN Customer ON Rental.customer_id = Customer.id LEFT JOIN Car ON Rental.car_id = Car.id LEFT JOIN Company ON Car.company_id = Company.id').then(([results]) => mapResultToRentals(results));
+    return connection.promise().query<DBRental[]>('SELECT Rental.id, Rental.rental_date, Rental.return_date, Rental.car_id, Car.name as car_name, Car.year, Car.color, Car.type, Car.daily_rate, Rental.customer_id, Customer.name as customer_name, Customer.dateBirth, Customer.email, Car.name as car_name, Company.name as company_name, Car.company_id FROM Rental LEFT JOIN Customer ON Rental.customer_id = Customer.id LEFT JOIN Car ON Rental.car_id = Car.id LEFT JOIN Company ON Car.company_id = Company.id ORDER BY id DESC').then(([results]) => mapResultToRentals(results));
 }
 
 export async function getRentalById(id: number) : Promise<Rental> {
-    return connection.promise().query<DBRental[]>('SELECT Rental.id, Rental.rental_date, Rental.return_date, Rental.car_id, Car.name as car_name, Car.year, Car.color, Car.type, Rental.daily_rate, Rental.customer_id, Customer.name as customer_name, Customer.age, Car.name as car_name, Company.name as company_name, Car.company_id FROM Rental LEFT JOIN Customer ON Rental.customer_id = Customer.id LEFT JOIN Car ON Rental.car_id = Car.id LEFT JOIN Company ON Car.company_id = Company.id WHERE Rental.id = ?', [id]).then(([results]) => mapResultToRental(results[0]));
+    return connection.promise().query<DBRental[]>('SELECT Rental.id, Rental.rental_date, Rental.return_date, Rental.car_id, Car.name as car_name, Car.year, Car.color, Car.type, Rental.daily_rate, Rental.customer_id, Customer.name as customer_name, Customer.dateBirth, Car.name as car_name, Company.name as company_name, Car.company_id FROM Rental LEFT JOIN Customer ON Rental.customer_id = Customer.id LEFT JOIN Car ON Rental.car_id = Car.id LEFT JOIN Company ON Car.company_id = Company.id WHERE Rental.id = ?', [id]).then(([results]) => mapResultToRental(results[0]));
 }
 
 export async function createRental(rental: Rental) : Promise<void> {
-    await connection.promise().query('INSERT INTO Rental (customer_id, car_id, daily_rate, rental_date, return_date) VALUES(?,?,?,?,?)', [rental.customer.id, rental.car.id, rental.rental_date, rental.return_date]);
+    await connection.promise().query('INSERT INTO Rental (customer_id, car_id, rental_date, return_date) VALUES(?,?,?,?)', [rental.customer.id, rental.car.id, formatDateString(rental.rental_date), formatDateString(rental.return_date)]);
+}
+
+function formatDateString(date: Date) : string {
+    return new Date(date).toISOString().split('T')[0]
 }
 
 export async function generateFakeRentals(amount: number) : Promise<void> {
     const rentals = await generateFakeRental(amount)
-    await connection.promise().query('INSERT INTO Rental (rental_date, return_date, daily_rate, customer_id, car_id) VALUES ?', [rentals.map(rental => [rental.rental_date, rental.return_date, rental.customer_id, rental.car_id])]);
+    await connection.promise().query('INSERT INTO Rental (rental_date, return_date, customer_id, car_id) VALUES ?', [rentals.map(rental => [rental.rental_date, rental.return_date, rental.customer_id, rental.car_id])]);
 }
 
 function mapResultToRentals(results: DBRental[]): Rental[] {

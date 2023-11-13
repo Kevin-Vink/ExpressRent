@@ -4,12 +4,10 @@ import axios from 'axios'
 
 export interface rentalsInitialState {
   rentals: Rental[]
-  loading: boolean
 }
 
 const initialState: rentalsInitialState = {
-  rentals: [],
-  loading: false
+  rentals: []
 }
 
 export const fetchRentals = createAsyncThunk(
@@ -40,17 +38,9 @@ export const rentalsSlice = createSlice({
     builder
       .addCase(fetchRentals.fulfilled, (state, action) => {
         state.rentals = action.payload
-        state.loading = false
-      })
-      .addCase(fetchRentals.pending, (state) => {
-        state.loading = true
       })
       .addCase(generateRentals.fulfilled, (state, action) => {
         state.rentals = action.payload
-        state.loading = false
-      })
-      .addCase(generateRentals.pending, (state) => {
-        state.loading = true
       })
   }
 })

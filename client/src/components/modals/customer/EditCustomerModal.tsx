@@ -44,7 +44,7 @@ const EditCustomerModal: FunctionComponent<Props> = (props: Props) => {
   useEffect(() => {
     if (newEmail === '') {
       setError('Email cannot be empty')
-    } else if (customers.find(c => c.email.toLowerCase() === newEmail.toLowerCase())) {
+    } else if (customers.find(c => c.email.toLowerCase() === newEmail.toLowerCase() && c.id !== customer?.id)) {
       setError('Customer with this email already exists')
     } else {
       setError('')

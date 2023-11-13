@@ -7,6 +7,7 @@ export interface DBRental extends RowDataPacket{
     daily_rate: number
     customer_id: number
     customer_name: string
+    email: string,
     company_id: number
     company_name: string
     dateBirth: Date

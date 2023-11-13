@@ -10,8 +10,12 @@ export async function getCars() {
     return connection.promise().query<DBCar[]>('SELECT Car.id, Car.name, Car.year, Car.type, Car.color, Car.company_id, Car.daily_rate, Company.name as company_name FROM Car LEFT JOIN Company ON Car.company_id = Company.id ORDER BY id DESC').then(([results]) => mapResultToCars(results));
 }
 
-export async function searchCars(searchTerm: string, type: string) {
-    return connection.promise().query<DBCar[]>(`SELECT Car.id, Car.name, Car.year, Car.type, Car.color, Car.company_id, Car.daily_rate, Company.name as company_name FROM Car LEFT JOIN Company ON Car.company_id = Company.id WHERE LOWER(Car.type) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') OR LOWER(Car.name) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') OR LOWER(Company.name) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') OR LOWER(Car.year) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') ORDER BY id DESC`, [searchTerm, type, searchTerm, type, searchTerm, type, searchTerm, type]).then(([results]) => mapResultToCars(results));
+export async function searchCars(searchTerm: string, type: string, maxPrice: number) {
+    if (maxPrice) {
+        return connection.promise().query<DBCar[]>(`SELECT Car.id, Car.name, Car.year, Car.type, Car.color, Car.company_id, Car.daily_rate, Company.name as company_name FROM Car LEFT JOIN Company ON Car.company_id = Company.id WHERE LOWER(Car.type) LIKE CONCAT('%', ?, '%') AND LOWER(Car.name) LIKE CONCAT('%', ?, '%') AND daily_rate <= ?`, [type, searchTerm, maxPrice]).then(([results]) => mapResultToCars(results));
+    } else {
+        return connection.promise().query<DBCar[]>(`SELECT Car.id, Car.name, Car.year, Car.type, Car.color, Car.company_id, Car.daily_rate, Company.name as company_name FROM Car LEFT JOIN Company ON Car.company_id = Company.id WHERE LOWER(Car.type) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') OR LOWER(Car.name) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') OR LOWER(Company.name) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') OR LOWER(Car.year) LIKE CONCAT('%', ?, '%') AND LOWER(Car.type) LIKE CONCAT('%', ?, '%') ORDER BY id DESC`, [searchTerm, type, searchTerm, type, searchTerm, type, searchTerm, type]).then(([results]) => mapResultToCars(results));
+    }
 }
 
 export async function getCarById(id: number) {

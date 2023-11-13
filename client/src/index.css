@@ -26,6 +26,16 @@ select {
     -webkit-appearance: none;
 }
 
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 /* For IE10 */
 select::-ms-expand {
     display: none;

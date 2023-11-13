@@ -2,13 +2,14 @@ import React, { type FunctionComponent, useEffect } from 'react'
 import ListItem from './ListItem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBuilding } from '@fortawesome/free-regular-svg-icons'
-import { faLeftRight, faCarSide, faUserGroup, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faLeftRight, faCarSide, faUserGroup, faHome, faReceipt } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/store'
 import { fetchCars } from '../reducers/carsReducer'
 import { toast } from 'react-toastify'
 import { fetchCompanies } from '../reducers/companyReducer'
 import { fetchCustomers } from '../reducers/customerReducer'
+import { fetchRentals } from '../reducers/rentalsReducer'
 
 interface Props {
   collapsed: boolean
@@ -26,6 +27,7 @@ const SideBar: FunctionComponent<Props> = (props: Props) => {
   const { cars } = useAppSelector(state => state.cars)
   const { companies } = useAppSelector(state => state.companies)
   const { customers } = useAppSelector(state => state.customers)
+  const { rentals } = useAppSelector(state => state.rentals)
 
   useEffect(() => {
     if (cars.length === 0) {
@@ -34,8 +36,10 @@ const SideBar: FunctionComponent<Props> = (props: Props) => {
       dispatch(fetchCompanies()).catch((err) => toast.error(err.message))
     } else if (customers.length === 0) {
       dispatch(fetchCustomers()).catch((err) => toast.error(err.message))
+    } else if (rentals.length === 0) {
+      dispatch(fetchRentals()).catch((err) => toast.error(err.message))
     }
-  }, [cars, companies, customers])
+  }, [cars, companies, customers, rentals])
 
   return (
         <div
@@ -79,6 +83,11 @@ const SideBar: FunctionComponent<Props> = (props: Props) => {
                                   icon={<FontAwesomeIcon icon={faUserGroup}/>}
                                   collapsed={collapsed}>
                             <p className="text-sm font-bold text-blue-500 bg-blue-300/25 rounded-md py-px px-2">{customers.length}</p>
+                        </ListItem>
+                        <ListItem title="Rentals" to="/dashboard/rentals"
+                                  icon={<FontAwesomeIcon icon={faReceipt}/>}
+                                  collapsed={collapsed}>
+                            <p className="text-sm font-bold text-blue-500 bg-blue-300/25 rounded-md py-px px-2">{rentals.length}</p>
                         </ListItem>
                     </div>
                     <div>
